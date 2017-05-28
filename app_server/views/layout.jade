@@ -5,7 +5,39 @@ html
     title= title
     link(rel='stylesheet', href='/bootstrap/css/amelia.bootstrap.css')
     link(rel='stylesheet', href='/stylesheets/style.css')
-  body
-    block content
     script(src='/javascripts/jquery-3.2.1.min.js')
     script(src='/bootstrap/js/bootstrap.min.js')
+  body
+
+    .navbar.navbar-default.navbar-fixed-top
+      .container
+        .navbar-header
+          a.navbar-brand(href='/') News-Summary-App
+          button.navbar-toggle(type='button', data-toggle='collapse', data-target='#navbar-main')
+            span.icon-bar
+            span.icon-bar
+            span.icon-bar
+        #navbar-main.navbar-collapse.collapse
+          ul.nav.navbar-nav
+            li
+              a(href='/about/') About
+
+    #banner.page-header
+      .row
+        .col-lg-6
+          h1 News Summary
+            small &nbsp; View The News
+    .row
+      .col-xs-12.col-sm-8
+        p List Area
+      .col-xs-12.col-sm-4
+        p.lead News Summary App Provides You With News Extracts
+
+    .conainer
+      block content
+
+
+      footer
+        .row
+          .col-xs-12
+            small &copy; News-Summary-App 2017
