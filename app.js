@@ -5,6 +5,10 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
+// database
+require('./app_server/models/db');
+
+// require router files
 var index = require('./app_server/routes/index');
 var users = require('./app_server/routes/users');
 
