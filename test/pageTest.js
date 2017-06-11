@@ -6,6 +6,7 @@ var server = require('../app');
 var should = chai.should();
 
 chai.use(chaiHttp);
+
 describe('Homepage', function(){
   it('should GET /', function(done) {
     chai.request(server)
