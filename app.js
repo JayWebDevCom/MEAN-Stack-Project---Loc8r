@@ -6,12 +6,11 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 // database
-require('./app_server/models/db');
+require('./app_api/models/db');
 
 // require router files
 var routes = require('./app_server/routes/index');
 var users = require('./app_server/routes/users');
-
 var routesApi = require('./app_api/routes/index');
 
 var app = express();
