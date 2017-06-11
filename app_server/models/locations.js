@@ -1,9 +1,33 @@
 // defining database schema
 var mongoose = require('mongoose');
+
+var openingTimeSchema = new mongoose.Schema({
+  days: {type: String, required: true},
+  opening: String,
+  closing: String,
+  closed: {type: Boolean, required: true}
+});
+
+var reviewSchema = new mongoose.Schema({
+  author: String,
+  rating: { type: Number, required: true, min: 0, max: 0 },
+  reviewText: String,
+  createdOn: { type: Date, default: Date.now() } //maybe dont need the parenteses for the method
+});
+
+// Jaiye Experimenting
+var nameSchema = new mongoose.Schema ({
+  name: {type: String, required: true}
+});
+
 var locationsSchema = new mongoose.Schema({
-  name: {type: String, required: true},
+  name: [nameSchema], // Jaiye Experimenting
   address: String,
   rating: {type: Number, "default": 0, min: 0, max: 5},
   facilities: [String],
-  coords: {type: [Number], index: '2dsphere'}
+  coords: {type: [Number], index: '2dsphere'},
+  openingTimes: [openingTimeSchema],
+  review: [reviewSchema]
  });
+
+ mongoose.model('Location', locationsSchema);
