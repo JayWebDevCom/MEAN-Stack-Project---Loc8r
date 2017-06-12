@@ -15,19 +15,14 @@ var reviewSchema = new mongoose.Schema({
   createdOn: { type: Date, default: Date.now() } //maybe dont need the parenteses for the method
 });
 
-// Jaiye Experimenting
-var nameSchema = new mongoose.Schema ({
-  name: {type: String, required: true}
-});
-
 var locationsSchema = new mongoose.Schema({
-  name: [nameSchema], // Jaiye Experimenting
+  name: {type: String, required: true},
   address: String,
   rating: {type: Number, "default": 0, min: 0, max: 5},
   facilities: [String],
   coords: {type: [Number], index: '2dsphere'},
   openingTimes: [openingTimeSchema],
-  review: [reviewSchema]
+  reviews: [reviewSchema]
  });
 
  mongoose.model('Location', locationsSchema);
