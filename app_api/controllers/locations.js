@@ -18,6 +18,21 @@ var theEarth = (function () {
   }
 })();
 
+var resultsFormatter = function (results) {
+  var returnArray = []
+  results.forEach(function(result){
+      returnArray.push({
+        distance: theEarth.getDistanceFromRads(result.dis),
+        name: result.obj.name,
+        address: result.obj.address,
+        rating: result.obj.rating,
+        facilities: result.obj.facilities,
+        _id: result.obj._id
+      });
+  });
+  return returnArray;
+}
+
 var sendJsonResponse = function (res, status, content) {
   res.status(status);
   res.json(content);
@@ -34,19 +49,9 @@ module.exports.locationsListByDistance = function(req, res) {
     spherical: true,
     num: 10
   };
-  Loc.geoNear(point, geoOptions, function (err, results, stats) {
-    var locations = []
-    results.forEach(function(result){
-        locations.push({
-          distance: theEarth.getDistanceFromRads(result.dis),
-          name: result.obj.name,
-          address: result.obj.address,
-          rating: result.obj.rating,
-          facilities: result.obj.facilities,
-          _id: result.obj._id
-        });
-    });
-    sendJsonResponse(res, 200, locations)
+
+Loc.geoNear(point, geoOptions, function (err, results, stats) {
+    sendJsonResponse(res, 200, resultsFormatter(results))
   }); //close Loc.geoNear
 };
 
