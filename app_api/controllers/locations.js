@@ -40,19 +40,20 @@ var sendJsonResponse = function (res, status, content) {
 
 module.exports.locationsListByDistance = function(req, res) {
   var lng = parseFloat(req.query.lng);
-  var lat = parseFloat(req.query.lat)
+  var lat = parseFloat(req.query.lat);
   var point = {
     type: "Point",
     coordinates: [lng, lat]
   };
   var geoOptions = {
     spherical: true,
+    maxDistance: theEarth.getRadsFromDistance(2000),
     num: 10
   };
 
 Loc.geoNear(point, geoOptions, function (err, results, stats) {
     sendJsonResponse(res, 200, resultsFormatter(results))
-  }); //close Loc.geoNear
+  });
 };
 
 module.exports.locationsCreate = function(req, res) {
