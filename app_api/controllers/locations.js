@@ -34,7 +34,20 @@ module.exports.locationsListByDistance = function(req, res) {
     spherical: true,
     num: 10
   };
-  Loc.geonear(point, geoOptions, callback)
+  Loc.geoNear(point, geoOptions, function (err, results, stats) {
+    var locations = []
+    results.forEach(function(result){
+        locations.push({
+          distance: theEarth.getDistanceFromRads(result.dis),
+          name: result.obj.name,
+          address: result.obj.address,
+          rating: result.obj.rating,
+          facilities: result.obj.facilities,
+          _id: result.obj._id
+        });
+    });
+    sendJsonResponse(res, 200, locations)
+  }); //close Loc.geoNear
 };
 
 module.exports.locationsCreate = function(req, res) {
