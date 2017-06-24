@@ -86,12 +86,44 @@ var doAddReview = function (req, res, location) {
         sendJsonResponse(res, 400, err)
       } else {
         updateAverageRating(location.id);
-        thisReview = location.reviews.[location.reviews.length -1]
+        thisReview = location.reviews[location.reviews.length -1]
         sendJsonResponse(res, 201, thisReview)
       }
     });
   }
 };
+
+var updateAverageRating = function(locationid) {
+  Loc
+  .findById(locationid)
+  .select('rating reviews')
+  .exec(
+    function(err, location) {
+      if (!err) {
+        doSetAverageRating(location);
+      }
+    });
+};
+
+var doSetAverageRating = function(location) {
+  var i, reviewCount, ratingAverage, ratingTotal;
+  if (location.reviews && location.reviews.length > 1) {
+    reviewCount = location.reviews.length;
+    ratingTotal = 0;
+    for (i = 0; i < reviewCount; i++) {
+      ratingTotal += location.reviews[i].rating
+    }
+    ratingAverage = parseInt(ratingTotal / reviewCount, 10)
+    location.rating = ratingAverage;
+    location.save(function(err){
+      if (err) {
+        console.log(err)
+      } else {
+        console.log("Average Rating updated to", ratingAverage)
+      }
+    })
+  }
+}
 
 module.exports.reviewUpdateOne = function(req, res) {
 
