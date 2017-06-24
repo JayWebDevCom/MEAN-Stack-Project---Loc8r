@@ -78,14 +78,14 @@ var doAddReview = function (req, res, location) {
     location.reviews.push({
       author: req.body.author,
       rating: req.body.rating,
-      reviewText: req.body,reviewText
+      reviewText: req.body.reviewText
     });
     location.save(function(err, location){
       var thisReview;
       if (err) {
         sendJsonResponse(res, 400, err)
       } else {
-        updateAverageRating(location.id);
+        updateAverageRating(location._id);
         thisReview = location.reviews[location.reviews.length -1]
         sendJsonResponse(res, 201, thisReview)
       }
@@ -126,8 +126,53 @@ var doSetAverageRating = function(location) {
 }
 
 module.exports.reviewUpdateOne = function(req, res) {
-
-}
+  if (!req.body.locationid || !req.body.reviewid) {
+    sendJsonResponse(res, 404, {
+      "message": "Not found, locationid and reviewid are buth required"
+    });
+    return;
+  }
+  Loc.findbyId(req.body.locationid)
+  .select('reviews')
+  .exec(
+    function(err, location) {
+      var thisReview;
+      if (!location) {
+        sendJsonResponse(res, 404, {
+          "message": "locationid not found"
+        });
+        return;
+      } else if (err) {
+        sendJsonResponse(res, 400, err);
+        return;
+      }
+      if (location.reviews && location.reviews.length > 0) {
+        thisReview = location.reviews.id(req.body.reviewid);
+        if (!thisReview) {
+          sendJsonResponse(res, 404, {
+            "message": "review not found"
+          });
+        } else {
+          thisReview.author = req.body.author;
+          thisReview.rating = req.body.rating;
+          thisReview.reviewText = req.body.reviewText;
+          location.save(function(err, location) {
+            if (err) {
+              sendJsonResponse(res, 404, err);
+            } else {
+              updateAverageRating(location._id);
+              sendJsonResponse(res, 200, thisReview);
+            }
+          });
+        }
+      } else {
+        sendJsonResponse(res, 404, {
+          "message": "no review to update"
+        });
+      }
+    }
+  );
+};
 
 module.exports.reviewDeleteOne = function(req, res) {
 
