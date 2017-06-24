@@ -12,7 +12,7 @@ var reviewSchema = new mongoose.Schema({
   author: String,
   rating: { type: Number, required: true, min: 0, max: 0 },
   reviewText: String,
-  createdOn: { type: Date, default: Date.now() } //maybe dont need the parenteses for the method
+  createdOn: { type: Date, default: Date.now() } //maybe dont need the parentheses for the method
 });
 
 var locationsSchema = new mongoose.Schema({
