@@ -26,26 +26,72 @@ module.exports.reviewReadOne = function(req, res) {
         sendJsonResponse(res, 404, { "message" : "review id not found" });
       } else {
           response = {
-            location : {
-              name : location.name,
-              id : req.params.locationid
+            location: {
+              name: location.name,
+              id: req.params.locationid
             },
-            review : review
+            review: review
           };
         sendJsonResponse(res, 200, response);
         }
       } else {
-        sendJsonResponse(res, 200, {"message" : "no reviews found"});
+        sendJsonResponse(res, 200, {
+          "message" : "no reviews found"
+        });
       }
     });
   } else {
-    sendJsonResponse(res, 404, { "message" : "Not found, location id and review id are both required" });
+    sendJsonResponse(res, 404, {
+      "message" : "Not found, location id and review id are both required"
+    });
   }
 };
 
 module.exports.reviewsCreate = function(req, res) {
+  var locationid = req.params.locationid;
+  if (locationid){
+    Loc
+      .findById(locationid)
+      .select('reviews')
+      .exec(
+        function(err, location) {
+          if (err) {
+            sendJsonResponse(res, 400, err)
+          } else {
+            doAddReview(req, res, location)
+          }
+        }
+      );
+  } else {
+    sendJsonResponse(res, 404, {
+      "message": "Not Found, locationid required"
+  });
+  }
+};
 
-}
+var doAddReview = function (req, res, location) {
+  if (!location) {
+    sendJsonResponse(res, 404, {
+      "message": "location not found"
+    })
+  } else {
+    location.reviews.push({
+      author: req.body.author,
+      rating: req.body.rating,
+      reviewText: req.body,reviewText
+    });
+    location.save(function(err, location){
+      var thisReview;
+      if (err) {
+        sendJsonResponse(res, 400, err)
+      } else {
+        updateAverageRating(location.id);
+        thisReview = location.reviews.[location.reviews.length -1]
+        sendJsonResponse(res, 201, thisReview)
+      }
+    });
+  }
+};
 
 module.exports.reviewUpdateOne = function(req, res) {
 
