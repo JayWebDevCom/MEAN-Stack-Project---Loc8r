@@ -51,12 +51,12 @@ module.exports.locationsListByDistance = function(req, res) {
     num: 10
   };
 
-Loc.geoNear(point, geoOptions, function (err, results, stats) {
-  if (err) {
-    sendJsonResponse(res, 404, err)
-  } else {
-    sendJsonResponse(res, 200, resultsFormatter(results))
-  }
+  Loc.geoNear(point, geoOptions, function (err, results, stats) {
+    if (err) {
+      sendJsonResponse(res, 404, err)
+    } else {
+      sendJsonResponse(res, 200, resultsFormatter(results))
+    }
   });
 };
 
