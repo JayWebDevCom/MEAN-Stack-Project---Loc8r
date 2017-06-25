@@ -50,7 +50,12 @@ module.exports.locationsListByDistance = function(req, res) {
     maxDistance: theEarth.getRadsFromDistance(20000000000),
     num: 10
   };
-
+  if ((!lng && lng!==0) || (!lat && lat!==0)) {
+    sendJsonResponse(res, 404, {
+      "message": "lng and lat query parameters are both required"
+    });
+    return;
+  }
   Loc.geoNear(point, geoOptions, function (err, results, stats) {
     if (err) {
       sendJsonResponse(res, 404, err)
