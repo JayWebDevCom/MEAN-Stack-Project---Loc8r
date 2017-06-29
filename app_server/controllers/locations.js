@@ -82,19 +82,41 @@ module.exports.locationInfo = function(req, res) {
   };
   request(requestOptions, function(err, response, body){
     var data = body;
-    data.coords = {
-      lng: body.coords[0],
-      lat: body.coords[1]
+    if ( response.statusCode === 200 ) {
+      data.coords = {
+        lng: body.coords[0],
+        lat: body.coords[1]
+      }
+      renderDetailPage(req, res, data);
+    } else {
+      _showError(req, res, response.statusCode)
     }
-    renderDetailPage(req, res, data);
   })
 }
 
+var _showError = function(req, res, status) {
+  var title, content;
+  if ( status === 404 ) {
+    title = '404, page not found';
+    content = 'We can\'t find what you are looking for. Sorry.';
+  } else {
+    title = status + ' , something\'s gone wron. Sorry.';
+    content = 'Something somewhere has gone wrong. Sorry.';
+  }
+  res.status(status);
+  res.render('generic-text', {
+    title: title,
+    content: content
+  });
+}
 
 var renderDetailPage = function(req, res, locationData) {
+  console.log(locationData)
   res.render('location-info', {
     title: locationData.name,
-    pageHeader: { title: locationData.name },
+    pageHeader: {
+      title: locationData.name
+    },
     sidebar: {
       context: 'is on Loc8r because it has accessible wifi and space to sit down with your laptop and get some work done.',
       callToAction: 'If you\'ve been and you like it - or if you don\'t - please leave a review to help other people just like you.'
