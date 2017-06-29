@@ -13,7 +13,7 @@ block content
         .col-xs-12.col-sm-6
           p.rating
 
-  
+
           .panel.panel-primary
             .panel-heading
               h2.panel-title Opening hours
@@ -55,8 +55,9 @@ block content
                     .well.well-sm.review-header
                       span.rating
                         +outputRating(review.rating)
-                      span.reviewAuthor  #{review.author}
-                      small.reviewTimestamp  #{review.timestamp}
+                      span.reviewAuthor #{review.author}
+                        +formatDate(review.createdOn)
+                      small.reviewTimestamp  #{review.createdOn}
                     .col-xs-12
                       p !{(review.reviewText).replace(/\n/g, '<br />')}
 
