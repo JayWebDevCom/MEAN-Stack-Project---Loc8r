@@ -110,14 +110,16 @@ var renderDetailPage = function(req, res, locationData) {
 
 /* GET 'add review' page */
 module.exports.addReview = function(req, res) {
-  renderReviewForm(req, res);
+  getLocationInfo(req, res, function(req, res, responseData){
+    renderReviewForm(req, res, responseData);
+  })
 }
 
-var renderReviewForm = function(req, res) {
+var renderReviewForm = function(req, res, locDetail) {
   res.render('location-review-form', {
-    title: 'Review Starcups on Loc8r',
+    title: 'Review ' + locDetail.name + ' on Loc8r',
     pageHeader: {
-      title: 'Review Starcups'
+      title: 'Review ' + locDetail.name
     }
   });
 }
@@ -150,5 +152,27 @@ var getLocationInfo = function(req, res, callback) {
 
 /* POST a new review */
 module.exports.doAddReview = function(req, res) {
-
+  var requestOptions, path, locationid, postdata;
+  locationid = req.params.locationid
+  path = '/api/locations/' + locationid + '/reviews';
+  postdata = {
+    author: req.body.name,
+    rating: parseInt(req.body.rating, 10),
+    reviewText: req.body.review
+  }
+  requestOptions = {
+    url: apiOptions.server + path,
+    method: "POST",
+    json: postdata
+  }
+  request(
+    requestOptions,
+    function(err, response, body) {
+      if (response.statusCode === 201) {
+        res.redirect('/location/' + locationid);
+      } else {
+        _showError(req, res, response.statusCode)
+      }
+    }
+  )
 }
