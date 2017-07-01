@@ -73,24 +73,8 @@ var _formatDistance = function(distance) {
 
 /* GET 'location info' page */
 module.exports.locationInfo = function(req, res) {
-  var requestOptions, path;
-  path = '/api/locations/' + req.params.locationid
-  requestOptions = {
-    url: apiOptions.server + path,
-    method: "GET",
-    json: {}
-  };
-  request(requestOptions, function(err, response, body){
-    var data = body;
-    if ( response.statusCode === 200 ) {
-      data.coords = {
-        lng: body.coords[0],
-        lat: body.coords[1]
-      }
-      renderDetailPage(req, res, data);
-    } else {
-      _showError(req, res, response.statusCode)
-    }
+  getLocationInfo(req, res, function(req, res, responseData){
+    renderDetailPage(req, res, responseData)
   })
 }
 
@@ -100,7 +84,7 @@ var _showError = function(req, res, status) {
     title = '404, page not found';
     content = 'We can\'t find what you are looking for. Sorry.';
   } else {
-    title = status + ' , something\'s gone wron. Sorry.';
+    title = status + ' , something\'s gone wrong. Sorry.';
     content = 'Something somewhere has gone wrong. Sorry.';
   }
   res.status(status);
@@ -111,7 +95,6 @@ var _showError = function(req, res, status) {
 }
 
 var renderDetailPage = function(req, res, locationData) {
-  console.log(locationData)
   res.render('location-info', {
     title: locationData.name,
     pageHeader: {
@@ -127,10 +110,45 @@ var renderDetailPage = function(req, res, locationData) {
 
 /* GET 'add review' page */
 module.exports.addReview = function(req, res) {
+  renderReviewForm(req, res);
+}
+
+var renderReviewForm = function(req, res) {
   res.render('location-review-form', {
     title: 'Review Starcups on Loc8r',
     pageHeader: {
       title: 'Review Starcups'
     }
-  })
+  });
+}
+
+var getLocationInfo = function(req, res, callback) {
+  var requestOptions, path;
+  path = '/api/locations/' + req.params.locationid;
+  console.log(req.params.locationid)
+  requestOptions = {
+    url: apiOptions.server + path,
+    method: "GET",
+    json: {}
+  };
+  request(
+    requestOptions,
+    function(err, response, body) {
+      var data = body;
+      if (response.statusCode === 200) {
+        data.coords = {
+          lng: body.coords[0],
+          lat: body.coords[1]
+        };
+        callback(req, res, data);
+      } else {
+        _showError(req, res, response.statusCode)
+      }
+    }
+  );
+};
+
+/* POST a new review */
+module.exports.doAddReview = function(req, res) {
+
 }
