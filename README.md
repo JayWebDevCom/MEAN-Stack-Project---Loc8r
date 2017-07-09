@@ -1,4 +1,6 @@
 ## Loc8r
+![CafeLoc8r](https://cdn2.iconfinder.com/data/icons/maps-and-navigation-glyph-2/128/70-512.png)
+
 Loc8r is an example of a fullstack application built in Javascript. It is an express based web application that lists cafes and their corresponding facilities. It also allows for site visitors to leave reviews.
 
 ### Description
