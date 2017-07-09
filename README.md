@@ -10,7 +10,41 @@ The application uses API logic and the request module to effectively make reques
 
 ### Configuration
 Clone this repo
-run `$ npm i`
-run `$ nodemon`
-
+* run `$ npm i`
+* run `$ nodemon`
 * Navigate to port 3000 of your locally hosted server.
+
+I used the [Postman](https://chrome.google.com/webstore/detail/postman/fhbjgbiflinjbdggehcddcbncdddomop?hl=en) Chrome App to populate the database with entries via a post API route using x-www-form-urlencoded data.
+
+You may need to create a local database first.
+```
+* $ mongo
+* $ use Loc8r;
+```
+
+You can also type the following outline as a method for creating new database records.
+```
+db.locations.save({
+ name: 'Joeys',
+ address: '156 Orange Grove, Marley, AS1 3ER',
+ rating: 3,
+ facilities: ['Quizes', 'Food', 'Premium wifi', 'Dating', 'Games', 'Movies'],
+ coords: [-0.9650830, 51.855000],
+ openingTimes: [{
+ days: 'Monday - Friday',
+ opening: '7:00am',
+ closing: '7:00pm',
+ closed: false
+ }, {
+ days: 'Saturday',
+ opening: '10:00am',
+ closing: '6:00pm',
+ closed: false
+ }, {
+ days: 'Sunday',
+ opening: '11:00am',
+ closing: '6:00pm',
+ closed: false
+}]
+})
+```
