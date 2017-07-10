@@ -25,28 +25,32 @@ You may need to create a local database first.
 ```
 
 You can also type the following outline as a method for creating new database records.
-```
+``` javascript
 db.locations.save({
- name: 'Joeys',
- address: '156 Orange Grove, Marley, AS1 3ER',
- rating: 3,
- facilities: ['Quizes', 'Food', 'Premium wifi', 'Dating', 'Games', 'Movies'],
- coords: [-0.9650830, 51.855000],
- openingTimes: [{
- days: 'Monday - Friday',
- opening: '7:00am',
- closing: '7:00pm',
- closed: false
- }, {
- days: 'Saturday',
- opening: '10:00am',
- closing: '6:00pm',
- closed: false
- }, {
- days: 'Sunday',
- opening: '11:00am',
- closing: '6:00pm',
- closed: false
-}]
-})
+  name: "Joeys",
+  address: "156 Orange Grove, Marley, AS1 3ER",
+  rating: 3,
+  facilities: ["Quizes", "Food", "Premium wifi", "Dating", "Games", "Movies"],
+  coords: [-0.965083, 51.855],
+  openingTimes: [
+    {
+      days: "Monday - Friday",
+      opening: "7:00am",
+      closing: "7:00pm",
+      closed: false
+    },
+    {
+      days: "Saturday",
+      opening: "10:00am",
+      closing: "6:00pm",
+      closed: false
+    },
+    {
+      days: "Sunday",
+      opening: "11:00am",
+      closing: "6:00pm",
+      closed: false
+    }
+  ]
+});
 ```
