@@ -10,6 +10,7 @@
     "npm": "~4.2.0"
   },
   "dependencies": {
+    "angular": "^1.6.6",
     "body-parser": "~1.17.1",
     "bootstrap": "^3.3.7",
     "cookie-parser": "~1.4.3",

@@ -7,53 +7,22 @@ if (process.env.NODE_ENV === 'production') {
   apiOptions.server = 'https://rocky-ridge-82795.herokuapp.com'
 }
 
-var renderHomepage = function (req, res, responseBody) {
-  var message;
-  if ( !(responseBody instanceof Array) ) {
-    message = "API lookup error"
-    responseBody = []
-  } else {
-    if (!responseBody.length) {
-      message = "No places found nearby"
-    }
-  }
-
+var renderHomepage = function (req, res) {
   res.render('locations-list', {
-    title: 'Loc8r - find a place to work with wifi',
-    sidebar: "Looking for wifi and a seat? Loc8r helps you find places to work when out and about. Perhaps with coffee, cake or a pint? Let Loc8r help you find the place you're looking for.",
+    title: 'Loc8r - find a great place to work with sound WiFi',
     pageHeader: {
       title: 'Loc8r',
-      strapline: 'Find places to work with wifi near you'
+      strapline: 'Find great places to work with sound WiFi!'
     },
-    locations: responseBody,
-    message: message
+    sidebar: "Looking for wifi and a seat? Loc8r helps you find places to \
+     work when out and about. Perhaps with coffee, cake or a pint? Let Loc8r \
+     help you find the place you're looking for."
   });
-}
+};
 
 /* GET 'home' page */
 module.exports.homelist = function(req, res) {
-  var requestOptions, path;
-  path = '/api/locations';
-  requestOptions = {
-    url: apiOptions.server + path,
-    method: "GET",
-    json: {},
-    qs: {
-      lng: -0.9690791,
-      lat: 51.455047,
-      maxDistance: 20
-    }
-  };
-  request(requestOptions, function(err, response, responseBody) {
-    var i, data;
-    data = responseBody
-    if (response.statusCode === 200 && data.length) {
-      for (i = 0; i < data.length; i++) {
-        data[i].distance = _formatDistance(data[i].distance)
-      }
-    }
-    renderHomepage(req, res, data);
-  });
+  renderHomepage(req, res);
 }
 
 var _formatDistance = function(distance) {
@@ -179,6 +148,6 @@ module.exports.doAddReview = function(req, res) {
           _showError(req, res, response.statusCode);
         }
       }
-    )  
+    )
   }
 }
