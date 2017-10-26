@@ -1,27 +1,30 @@
 angular.module("loc8rApp", []);
 
-var locationListCtrl = function($scope) {
-  $scope.data = {
-    locations: [
-      {
-        name: "Burger Queen",
-        address: "125 High Street, Reading, RG6 1PS",
-        rating: 3,
-        facilities: ["Hot drinks", "Food", "Premium wifi"],
-        distance: "0.296456",
-        _id: "5370a35f2536f6785f8dfb6a"
-      },
-      {
-        name: "Costy",
-        address: "125 High Street, Reading, RG6 1PS",
-        rating: 5,
-        facilities: ["Hot drinks", "Food", "Alcoholic drinks"],
-        distance: "0.7865456",
-        _id: "5370a35f2536f6785f8dfb6a"
-      }
-    ]
-  };
+var locationListCtrl = function($scope, $http) {
+  $scope.message = "Searching for nearby places";
+  $http({
+    method: "GET",
+    url: "/api/locations?lng=-0.79&lat=51.3&maxDistance=20"
+  }).then(function(data) {
+    $scope.message = data.data.length > 0 ? "" : "No locations found";
+    $scope.data = { locations: data.data };
+  }),
+    function(error) {
+      $scope.message = "Sorry something has gone wrong";
+    };
 };
+
+// var locationListCtrl = function($scope, loc8rData) {
+//   $scope.message = "Searching for nearby places";
+//   loc8rData
+//     .success(function(data) {
+//       $scope.message = data.length > 0 ? "" : "No locations found";
+//       $scope.data = { locations: data };
+//     })
+//     .error(function(e) {
+//       $scope.message = "Sorry something has gone wrong";
+//     });
+// };
 
 var _isNumeric = function(n) {
   return !isNaN(parseFloat(n) && isFinite(n));
@@ -48,13 +51,19 @@ var formatDistance = function() {
 var ratingStars = function() {
   return {
     scope: {
-      thisRating : "=rating"
+      thisRating: "=rating"
     },
-    templateUrl : '/angular/rating-stars.html'
+    templateUrl: "/angular/rating-stars.html"
   };
 };
 
-angular.module("loc8rApp")
-.controller("locationListCtrl", locationListCtrl)
-.filter('formatDistance', formatDistance)
-.directive('ratingStars', ratingStars);
+var loc8rData = function($http) {
+  return $http.get("/api/locations?lng=-0.79&lat=51.3&maxDistance=20");
+}
+
+angular
+  .module("loc8rApp")
+  .controller("locationListCtrl", locationListCtrl)
+  .filter("formatDistance", formatDistance)
+  .directive("ratingStars", ratingStars)
+  .service("loc8rData", loc8rData);
