@@ -18,14 +18,17 @@ var locationListCtrl = function($scope, loc8rData, geolocation) {
   $scope.message = "Checking your location";
 
   $scope.getData = function(position) {
+    var lat = position.coords.latitude,
+      lng = position.coords.longitude;
     $scope.message = "Searching for nearby places...";
-    loc8rData
+    loc8rData.locationByCoords(lat, lng)
       .success(function(data) {
         $scope.message = data.length > 0 ? "" : "No locations found";
         $scope.data = { locations: data };
       })
       .error(function(e) {
         $scope.message = "Sorry something has gone wrong";
+        console.log(e);
       });
   };
 
@@ -76,7 +79,14 @@ var ratingStars = function() {
 };
 
 var loc8rData = function($http) {
-  return $http.get("/api/locations?lng=-0.79&lat=51.3&maxDistance=20");
+  var locationByCoords = function(lat, lng) {
+    return $http.get(
+      "/api/locations?lng=" + lng + "&lat=" + lat + " &maxDistance=20"
+    );
+  };
+  return {
+    locationByCoords: locationByCoords
+  };
 };
 
 var geolocation = function() {
@@ -91,7 +101,6 @@ var geolocation = function() {
     getPosition: getPosition
   };
 };
-
 
 angular
   .module("loc8rApp")

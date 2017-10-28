@@ -6,7 +6,7 @@ block content
       h1= pageHeader.title
   .row
     .col-xs-12.col-md-8
-      form.form-horizontal#addReview(action="", method="post", role="form")
+      form.form-horizontal#addReview(action="#{url}", method="post", role="form")
         - if (error == 'val')
           .alert.alert-danger(role=alert) All Fields required, please try again
         .form-group
