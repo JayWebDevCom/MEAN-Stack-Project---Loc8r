@@ -16,7 +16,3 @@ module.exports.about = function (req, res) {
         tempor vitae.'
     });
 }
-
-module.exports.angular = function(req,res) {
-  res.sendfile('./app_server/views/angular-test.html');
-}
