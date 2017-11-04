@@ -20,10 +20,14 @@ function homeCtrl($scope, loc8rData, geolocation) {
     var lng = position.coords.longitude;
     viewModel.message = "Position determined, searching for nearby places";
 
-    loc8rData.locationByCoords(lat, lng)
+    loc8rData
+      .locationByCoords(lat, lng)
       .success(function(data) {
-        viewModel.message = data.length > 0 ? "" : "No locations found nearby";
-        console.log(data);
+        viewModel.message =
+          data.length > 0
+            ? "Locations successfully retrieved \
+        and displayed below"
+            : "No locations found nearby";
         viewModel.data = { locations: data };
       })
       .error(function(e) {
@@ -43,5 +47,9 @@ function homeCtrl($scope, loc8rData, geolocation) {
     });
   };
 
-  geolocation.getPosition(viewModel.getData, viewModel.showError, viewModel.noGeo);
+  geolocation.getPosition(
+    viewModel.getData,
+    viewModel.showError,
+    viewModel.noGeo
+  );
 }

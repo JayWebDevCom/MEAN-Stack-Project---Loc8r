@@ -1,6 +1,4 @@
-angular
-  .module('loc8rApp')
-  .service('loc8rData', loc8rData);
+angular.module("loc8rApp").service("loc8rData", loc8rData);
 
 function loc8rData($http) {
   var locationByCoords = function(lat, lng) {
@@ -11,4 +9,4 @@ function loc8rData($http) {
   return {
     locationByCoords: locationByCoords
   };
-};
+}
